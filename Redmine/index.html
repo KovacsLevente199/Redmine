@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="redmine.js"></script>
+    <title>Főoldal</title>
+</head>
+<body>
+    <div class="header">
+        <div id="user-info">
+            <span id="name"></span>
+            <span id="id"></span>
+        </div>
+        <a href="redmine.html" id="logout">Kijelentkezés</a>
+    </div>
+
+    <h1>Projektkezelő Rendszer</h1>
+
+    <div id="projectsList">
+    </div>
+
+    <div id="tasksList">
+    </div>
+    <div id="newTaskForm">
+  
+       
+       
+       
+        <div class="wrapper">
+            <h2>Új feladat felvétele</h2>
+            <form id="taskForm">
+                <label for="taskName">Feladat neve:</label><br>
+                <input type="text" id="taskName" name="taskName" required><br>
+                <label for="taskDescription">Leírás:</label><br>
+                <textarea id="taskDescription" name="taskDescription" required></textarea><br>
+                <label for="developer">Fejlesztő:</label><br>
+                <select id="developer" name="developer" required>
+                    <option value="Fejlesztő 1">Developer</option>
+                    <option value="Fejlesztő 2">Manager</option>
+                </select><br><br>
+                <form action="index.html">
+                    <button type="submit" class="btn">Felvétel</button>
+                </form>
+            </form>
+
+        </div>
+
+        <div class="wrapper2">
+            <h3>Szűrés</h3>
+        </div>
+
+        <div class="container">
+            <div class="header1">
+                <h1>Adatbázis</h1><br>
+            </div>
+        </div>
+
+
+
+    </div>
+</body>
+</html>
