@@ -7,8 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Images\" />
-    <Folder Include="Content\" />
+    <Compile Remove="Content\**" />
+    <Compile Remove="Images\**" />
+    <Content Remove="Content\**" />
+    <Content Remove="Images\**" />
+    <EmbeddedResource Remove="Content\**" />
+    <EmbeddedResource Remove="Images\**" />
+    <None Remove="Content\**" />
+    <None Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
 </Project>
