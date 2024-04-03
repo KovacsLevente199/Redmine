@@ -18,6 +18,11 @@ namespace Redmine.Controllers
             return View();
         }
 
+        public IActionResult RedirectMainPage()
+        {
+            return RedirectToAction("MainPage");
+        }
+
         public IActionResult MainPage() 
         {
             return View();

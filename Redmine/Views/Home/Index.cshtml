@@ -1,6 +1,8 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    
 }
+
+<link href="~/css/main_layout.css" rel="stylesheet" />
 
 <div>
     <div class="wrapper">
@@ -14,7 +16,7 @@
             <i class="bx bxs-lock-alt"></i>
         </div>
         <form action="index.html">
-            <a asp-area="" asp-controller="Home" asp-action="MainPage"> <div class="btn">Bejelentkezés</div></a>
+            <a href="@Url.Action("MainPage","Home")"> <div class="btn">Bejelentkezés</div></a>
         </form>
     </div>
 </div>
