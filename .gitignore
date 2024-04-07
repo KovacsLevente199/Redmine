@@ -4,3 +4,6 @@
 
 /Redmine/obj
 /Redmine/bin/Debug/net8.0
+*.dll
+/RedMine_backend/bin
+/RedMine_backend/obj

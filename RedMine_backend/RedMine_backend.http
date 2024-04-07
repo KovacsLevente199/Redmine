@@ -1,0 +1,6 @@
+@RedMine_backend_HostAddress = http://localhost:5136
+
+GET {{RedMine_backend_HostAddress}}/RedMineDataList/LoadData
+Accept: application/json
+
+###
