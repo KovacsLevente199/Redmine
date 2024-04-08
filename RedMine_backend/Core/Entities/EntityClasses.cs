@@ -44,6 +44,7 @@ namespace RedMine_backend.Core.Entities
     {
         [Key]
         public int ID { get; set; }
+        public ProjectDevelopers ProjectDevelopers { get; set; }
         public Tasks Tasks { get; set; }
         public string Name { set; get; }
         [ForeignKey("ProjectTypes")]
@@ -54,6 +55,7 @@ namespace RedMine_backend.Core.Entities
 
     public class ProjectDevelopers
     {
+        [Key]
         public int ID { get; set; }
         [ForeignKey("Developers")]
         public int DeveloperID { get; set; }
@@ -68,5 +70,6 @@ namespace RedMine_backend.Core.Entities
         [Key]
         public int ID { get; set; }
         public string Name { set; get; }
+        public Projects Projects { get; set; }
     }
 }

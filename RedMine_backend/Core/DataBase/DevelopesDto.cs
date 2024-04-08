@@ -2,7 +2,7 @@
 
 namespace RedMine_backend.Core.DataBase
 {
-    public class DevelopesDto
+    public class DevelopersDto
     {
         public int ID { get; set; }
         public string Name { set; get; }

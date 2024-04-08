@@ -17,24 +17,36 @@ namespace DataBaseManager
 
             protected override void OnConfiguring(DbContextOptionsBuilder options)
                 => options.UseSqlite("Data Source=Redmine.db");
-
+            
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
                 modelBuilder.Entity<Tasks>()
                     .HasOne(b => b.Managers)
                     .WithOne(a => a.Tasks) 
                     .HasForeignKey<Tasks>(b => b.UserID); 
-
+                
                  modelBuilder.Entity<Tasks>()
                     .HasOne(b => b.Projects)
                     .WithOne(a => a.Tasks) 
                     .HasForeignKey<Tasks>(b => b.ProjectID);
-
+                
                 modelBuilder.Entity<ProjectDevelopers>()
                     .HasOne(b => b.Developers)
                     .WithOne(a => a.ProjectDevelopers)
                     .HasForeignKey<ProjectDevelopers>(b => b.DeveloperID);
+                
+                modelBuilder.Entity<ProjectDevelopers>()
+                    .HasOne(b => b.Projects)
+                    .WithOne(a => a.ProjectDevelopers)
+                    .HasForeignKey<ProjectDevelopers>(b => b.ProjectID);
+                
+                modelBuilder.Entity<Projects>()
+                    .HasOne(b => b.ProjectTypes)
+                    .WithOne(a => a.Projects)
+                    .HasForeignKey<Projects>(b => b.ID);
+                
             }
+            
         }
     }
 }
