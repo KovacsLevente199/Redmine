@@ -15,4 +15,13 @@ namespace RedMine_backend.Core.DataBase
         public int ID { get; set; }
         string Name { set; get; }
     }
+    
+    public class ProjectIDDto
+    {
+        public int ProjectID { get; set; }
+    }
+    public class ProjectType
+    {
+        public int TypeID { get; set; }
+    }
 }

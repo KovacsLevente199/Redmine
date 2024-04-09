@@ -3,6 +3,7 @@ using DataBaseManager;
 using DataBaseManager.DataBaseManager;
 using RedMine_backend.Core.Services;
 using System.Text.Json;
+using RedMine_backend.Core.DataBase;
 
 namespace RedMine_backend.Controllers
 {
@@ -37,13 +38,13 @@ namespace RedMine_backend.Controllers
             return Ok(test);
         }
 
-        
+
         [HttpPost("filter")]
-        public async Task<IActionResult> Filter() 
+        public async Task<IActionResult> Filter(ProjectType Tid) 
         {
             var test = new
             {
-                adat1 = "Adatok a filter vegpontrol",
+                adat1 = "A típusID: " + Tid.TypeID,
                 adat2 = "Az egy adat a szerverrol",
                 adat3 = "Masik adat a szerverrõl",
                 adat4 = new
@@ -53,12 +54,12 @@ namespace RedMine_backend.Controllers
             };
             return Ok(test);
         }
-        
 
-        
+
+
         [HttpPost("assignedtasks")]
         //public async Task<IActionResult> AssignedTasks(string Project)
-        public async Task<IActionResult> AssignedTasks()
+        public async Task<IActionResult> AssignedTasks(ProjectIDDto Pid)
         {
             /*
             DataBaseOperations result = new DataBaseOperations();
@@ -67,9 +68,9 @@ namespace RedMine_backend.Controllers
 
             var test = new
             {
-                adat1 = "Adatok a assignedtasks vegpontrol",
-                adat2 = "Az egy adat a szerverrol",
-                adat3 = "Masik adat a szerverrõl",
+                adat1 = "ProjektID: "+Pid.ProjectID,
+                adat2 = "Feladat1",
+                adat3 = "Feladat2",
                 adat4 = new
                 {
                     adat5 = "meg egy adat"
@@ -81,13 +82,13 @@ namespace RedMine_backend.Controllers
         
         
         [HttpPost("addproject")]
-        public async Task<IActionResult> addproject()
+        public async Task<IActionResult> addproject(ProjectsDto ProjectData)
         {
             var test = new
             {
-                adat1 = "Adatok a addproject vegpontrol",
-                adat2 = "Az egy adat a szerverrol",
-                adat3 = "Masik adat a szerverrõl",
+                adat1 = "Projekt neve: " + ProjectData.Name,
+                adat2 = "Projekt id: "+ ProjectData.ID,
+                adat3 = "Projekt leírása: " + ProjectData.Description,
                 adat4 = new
                 {
                     adat5 = "meg egy adat"
@@ -100,13 +101,14 @@ namespace RedMine_backend.Controllers
 
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login(UserDataDto UserInfo)
         {
+
             var test = new
             {
-                adat1 = "Adatok a login vegpontrol",
-                adat2 = "Az egy adat a szerverrol",
-                adat3 = "Masik adat a szerverrõl",
+                adat1 = "A klienstõl kapott adatokat és a szerver adatait is tartalmazza a válasz",
+                adat2 = UserInfo.UserName + " "+UserInfo.Password,
+                adat3 = "adat a szerverrõl",
                 adat4 = new
                 {
                     adat5 = "meg egy adat"
@@ -117,12 +119,12 @@ namespace RedMine_backend.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register()
+        public async Task<IActionResult> Register(UserDataDto UserInfo)
         {
             var test = new
             {
-                adat1 = "Adatok a register vegpontrol",
-                adat2 = "Az egy adat a szerverrol",
+                adat1 = "Felhasználó név: "+ UserInfo.UserName,
+                adat2 = "Jelszó: " + UserInfo.Password,
                 adat3 = "Masik adat a szerverrõl",
                 adat4 = new
                 {
