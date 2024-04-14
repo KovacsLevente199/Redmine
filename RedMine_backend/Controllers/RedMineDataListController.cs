@@ -23,7 +23,7 @@ namespace RedMine_backend.Controllers
         public async Task<IActionResult> LoadInitialData()
         {    
             DataBaseOperations result = new DataBaseOperations();
-            return Ok(result.QueryInitialProject());
+            return Ok(await result.QueryInitialProject());
         }
 
 
@@ -31,7 +31,7 @@ namespace RedMine_backend.Controllers
         public async Task<IActionResult> Filter(ProjectType Tid) 
         {
             DataBaseOperations result = new DataBaseOperations();
-            return Ok(result.FilterByType(Tid.TypeOfProject));
+            return Ok(await result.FilterByType(Tid.TypeOfProject));
         }
 
 
@@ -40,15 +40,15 @@ namespace RedMine_backend.Controllers
         public async Task<IActionResult> AssignedTasks(ProjectNameDto Pid)
         {
             DataBaseOperations result = new DataBaseOperations();
-            return Ok(result.QueryByAssigned(Pid.ProjectID));
+            return Ok(await result.QueryByAssigned(Pid.ProjectID));
         }
         
         
         [HttpPost("addproject")]
-        public async Task<IActionResult> addproject(ProjectsDto ProjectData)
+        public async Task<IActionResult> addproject(ProjectParametesDto ProjectData)
         {
-
-                return Ok();
+            DataBaseOperations result = new DataBaseOperations();
+            return Ok(await result.AddToDatabase(ProjectData));
         }
 
 
@@ -57,8 +57,7 @@ namespace RedMine_backend.Controllers
         public async Task<IActionResult> Login(UserDataDto UserInfo)
         {
             DataBaseOperations result = new DataBaseOperations();
-            result.QueryUserByLogin(UserInfo);
-            return Ok();
+            return Ok(await result.IsLoginValid(UserInfo));
         }
 
         /*
