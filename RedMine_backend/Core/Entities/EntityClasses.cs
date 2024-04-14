@@ -21,7 +21,9 @@ namespace RedMine_backend.Core.Entities
     {
         [Key]
         public int ID { get; set; }
-        public ProjectDevelopers ProjectDevelopers { get; set; }
+        //public ProjectDevelopers ProjectDevelopers { get; set; }
+        public ICollection<ProjectDevelopers> ProjectDevelopers { get; set; } = new List<ProjectDevelopers>();
+
         public string Name { set; get; }
         [EmailAddress]
         public string Email { get; set; }
@@ -48,25 +50,28 @@ namespace RedMine_backend.Core.Entities
         
         [Key]
         public int ID { get; set; }
-        [ForeignKey("ProjectDevelopers")]
-        public ProjectDevelopers ProjectDevelopers { get; set; }
 
         public string Name { set; get; }
+        public string Description { get; set; }
+
         [ForeignKey("ProjectTypes")]
         public int TypeID { get; set; }
         public ProjectTypes ProjectTypes { get; set; }
-        public string Description { get; set; }
 
         public ICollection<Tasks> Tasks { get; set; } = new List<Tasks>();
+        public ProjectDevelopers ProjectDevelopers { get; set; }
+
     }
 
     public class ProjectDevelopers
     {
         [Key]
         public int ID { get; set; }
+
         [ForeignKey("Developers")]
         public int DeveloperID { get; set; }
         public ICollection<Developers> Developers { get; set; } = new List<Developers>();
+
         [ForeignKey("Projects")]
         public int ProjectID { get; set; }
         public Projects Projects { get; set; }

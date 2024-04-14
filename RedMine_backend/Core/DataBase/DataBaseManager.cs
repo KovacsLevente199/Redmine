@@ -47,12 +47,6 @@ namespace DataBaseManager
                     .WithMany(p => p.Projects)
                     .HasForeignKey(pd => pd.TypeID)
                     .IsRequired(false);
-
-                modelBuilder.Entity<ProjectDevelopers>()
-                    .HasMany(t => t.Developers)
-                    .WithOne(p => p.ProjectDevelopers)
-                    .HasForeignKey(pd => pd.ProjectDevelopers)
-                    .IsRequired(false);
             }
             
         }
