@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RedMine_backend.Core.Entities;
+using System.Linq;
 
 namespace DataBaseManager
 {
@@ -21,30 +22,37 @@ namespace DataBaseManager
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
                 modelBuilder.Entity<Tasks>()
-                    .HasOne(b => b.Managers)
-                    .WithOne(a => a.Tasks) 
-                    .HasForeignKey<Tasks>(b => b.UserID); 
-                
-                 modelBuilder.Entity<Tasks>()
-                    .HasOne(b => b.Projects)
-                    .WithOne(a => a.Tasks) 
-                    .HasForeignKey<Tasks>(b => b.ProjectID);
+                     .HasOne(t => t.Managers)
+                     .WithMany(m => m.Tasks)
+                     .HasForeignKey(t => t.UserID)
+                     .IsRequired(false);
+
+
+                modelBuilder.Entity<Tasks>()
+                    .HasOne(t => t.Projects)
+                    .WithMany(p => p.Tasks)
+                    .HasForeignKey(t => t.ProjectID)
+                    .IsRequired(false);
+
                 
                 modelBuilder.Entity<ProjectDevelopers>()
-                    .HasOne(b => b.Developers)
-                    .WithOne(a => a.ProjectDevelopers)
-                    .HasForeignKey<ProjectDevelopers>(b => b.DeveloperID);
+                    .HasOne(t => t.Projects)
+                    .WithOne(p => p.ProjectDevelopers)
+                    .HasForeignKey<ProjectDevelopers>(pd => pd.ProjectID)
+                    .IsRequired(false);
                 
-                modelBuilder.Entity<ProjectDevelopers>()
-                    .HasOne(b => b.Projects)
-                    .WithOne(a => a.ProjectDevelopers)
-                    .HasForeignKey<ProjectDevelopers>(b => b.ProjectID);
-                
+
                 modelBuilder.Entity<Projects>()
-                    .HasOne(b => b.ProjectTypes)
-                    .WithOne(a => a.Projects)
-                    .HasForeignKey<Projects>(b => b.ID);
-                
+                    .HasOne(t => t.ProjectTypes)
+                    .WithMany(p => p.Projects)
+                    .HasForeignKey(pd => pd.TypeID)
+                    .IsRequired(false);
+
+                modelBuilder.Entity<ProjectDevelopers>()
+                    .HasMany(t => t.Developers)
+                    .WithOne(p => p.ProjectDevelopers)
+                    .HasForeignKey(pd => pd.ProjectDevelopers)
+                    .IsRequired(false);
             }
             
         }

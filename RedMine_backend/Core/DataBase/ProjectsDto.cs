@@ -7,6 +7,7 @@ namespace RedMine_backend.Core.DataBase
         public int ID { get; set; }
         public string Name { set; get; }
         public int TypeID { get; set; }
+        public string TypeName { set; get; }
         public string Description { get; set; }
     }
 
@@ -16,12 +17,12 @@ namespace RedMine_backend.Core.DataBase
         string Name { set; get; }
     }
     
-    public class ProjectIDDto
+    public class ProjectNameDto
     {
-        public int ProjectID { get; set; }
+        public string ProjectID { get; set; }
     }
     public class ProjectType
     {
-        public int TypeID { get; set; }
+        public string TypeOfProject { get; set; }
     }
 }
