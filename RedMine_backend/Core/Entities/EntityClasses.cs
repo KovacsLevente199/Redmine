@@ -29,7 +29,6 @@ namespace RedMine_backend.Core.Entities
         public string Name { set; get; }
         [EmailAddress]
         public string Email { get; set; }
-        public string Password { set; get; }
     }
 
     public class Tasks
