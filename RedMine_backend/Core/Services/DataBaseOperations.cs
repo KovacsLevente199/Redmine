@@ -101,6 +101,7 @@ namespace RedMine_backend.Core.Services
                         Name = NewDataBase.Name,
                         Description = NewDataBase.Description,
                         DeveloperID = NewDataBase.DeveloperID,
+                        ProjectID = NewDataBase.ProjectID,
                         DeadLine = NewDataBase.Deadline,
                     };
 

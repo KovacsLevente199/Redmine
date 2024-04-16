@@ -30,6 +30,7 @@ namespace RedMine_backend.Core.DataBase
     {
         public string Name { set; get; }
         public DateTime Deadline { set; get; }
+        public int ProjectID { set; get; }
         public string Description { set; get; }
         public int DeveloperID { set; get; }   
     }
