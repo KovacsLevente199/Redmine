@@ -11,4 +11,9 @@ namespace RedMine_backend.Core.DataBase
         public int UserID { get; set; }
         public DateTime DeadLine { get; set; }
     }
+
+    public class TasksParamDto
+    {
+        public int UserID { get; set;} 
+    }
 }

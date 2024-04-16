@@ -84,25 +84,47 @@ namespace RedMine_backend.Core.Services
             }
         }
 
-        public async Task<int> AddToDatabase(ProjectParametesDto NewDataBase) 
+        public async Task<int> AddToDatabase(ProjectParametersDto NewDataBase) 
         {
-            if (IsProjectExists(NewDataBase.Name).Result)
-            {
-                return 1;
-            }
             try
             {
                 using (var context = new RedmineContext())
                 {
-                    Projects record = new Projects();
-                    record.Name = NewDataBase.Name;
-                    record.Description = NewDataBase.Description;
-                    record.TypeID = NewDataBase.TypeID;
-                    context.Projects.Add(record);
-                    await context.SaveChangesAsync(); 
-                }
+                    var developer = await context.Developers.FindAsync(NewDataBase.DeveloperID);
+                    if (developer == null)
+                    {
+                        throw new ArgumentException($"Developer with ID {NewDataBase.DeveloperID} not found.");
+                    }
 
-                return 0;
+                    var task = new Tasks
+                    {
+                        Name = NewDataBase.Name,
+                        Description = NewDataBase.Description,
+                        DeveloperID = NewDataBase.DeveloperID,
+                        DeadLine = NewDataBase.Deadline,
+                    };
+
+                    context.Tasks.Add(task);
+
+                    await context.SaveChangesAsync();
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex + "Failed to load initial data");
+                throw;
+            }
+        }
+
+        public async Task<List<Tasks>> CreatedByManager(int ManagerID)
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    return await context.Tasks.Where(x => x.UserID == ManagerID).ToListAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -117,7 +139,7 @@ namespace RedMine_backend.Core.Services
             {
                 using (var context = new RedmineContext())
                 {
-                    bool result = await context.Developers.AnyAsync(x => (x.Name == loginData.UserName) && (x.Password == loginData.Password));
+                    bool result = await context.Managers.AnyAsync(x => (x.Name == loginData.UserName) && (x.Password == loginData.Password));
                     if(result)
                     {
                         return 0;
@@ -148,6 +170,48 @@ namespace RedMine_backend.Core.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex + "Error from IsProjectExissts");
+                throw;
+            }
+        }
+
+        public async Task<List<DevelopersDto>> QueryDevelopers()
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    return await context.Developers
+                        .Select(d => new DevelopersDto
+                        {
+                            ID = d.ID,
+                            Name = d.Name
+                        })
+                        .ToListAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred in QueryDevelopers: " + ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<Tasks> GetDeadLine(int ManagerID)
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    var records = await context.Tasks.ToListAsync();
+
+                    
+                    var recordWithMinValue = records.OrderBy(r => r.DeadLine).FirstOrDefault();
+                    return recordWithMinValue;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex + "Failed to load initial data");
                 throw;
             }
         }

@@ -30,8 +30,16 @@ namespace RedMine_backend.Controllers
         [HttpPost("filter")]
         public async Task<IActionResult> Filter(ProjectType Tid) 
         {
-            DataBaseOperations result = new DataBaseOperations();
-            return Ok(await result.FilterByType(Tid.TypeOfProject));
+            try
+            {
+                DataBaseOperations result = new DataBaseOperations();
+                var filteredData = await result.FilterByType(Tid.TypeOfProject);
+                return Ok(filteredData);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
         }
 
 
@@ -39,43 +47,86 @@ namespace RedMine_backend.Controllers
         [HttpPost("assignedtasks")]
         public async Task<IActionResult> AssignedTasks(ProjectNameDto Pid)
         {
-            DataBaseOperations result = new DataBaseOperations();
-            return Ok(await result.QueryByAssigned(Pid.ProjectID));
+            try
+            {
+                DataBaseOperations result = new DataBaseOperations();
+                return Ok(await result.QueryByAssigned(Pid.ProjectID));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
         }
         
         
-        [HttpPost("addproject")]
-        public async Task<IActionResult> addproject(ProjectParametesDto ProjectData)
+        [HttpPost("addtask")]
+        public async Task<IActionResult> addtask(ProjectParametersDto ProjectData)
         {
-            DataBaseOperations result = new DataBaseOperations();
-            return Ok(await result.AddToDatabase(ProjectData));
+            try
+            {
+                DataBaseOperations result = new DataBaseOperations();
+                return Ok(await result.AddToDatabase(ProjectData));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
         }
 
+        [HttpPost("tasksbymanager")]
+        public async Task<IActionResult> TasksByManager(TasksParamDto taskobj)
+        {
+            try
+            {
+                DataBaseOperations result = new DataBaseOperations();
+                return Ok(await result.CreatedByManager(taskobj.UserID));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
+        }
 
+        [HttpPost("taskdeadline")]
+        public async Task<IActionResult> TaskDeadLine(TasksParamDto taskobj)
+        {
+            try
+            {
+                DataBaseOperations result = new DataBaseOperations();
+                return Ok(await result.GetDeadLine(taskobj.UserID));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
+        }
+
+        [HttpPost("listdevelopers")]
+        public async Task<IActionResult> ListDevelopers()
+        {
+            try
+            {
+                DataBaseOperations result = new DataBaseOperations();
+                return Ok(await result.QueryDevelopers());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
+        }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserDataDto UserInfo)
         {
-            DataBaseOperations result = new DataBaseOperations();
-            return Ok(await result.IsLoginValid(UserInfo));
-        }
-
-        /*
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(UserDataDto UserInfo)
-        {
-            var test = new
+            try
             {
-                adat1 = "Felhasználó név: "+ UserInfo.UserName,
-                adat2 = "Jelszó: " + UserInfo.Password,
-                adat3 = "Masik adat a szerverrõl",
-                adat4 = new
-                {
-                    adat5 = "meg egy adat"
-                }
-            };
-            return Ok(test);
+                DataBaseOperations result = new DataBaseOperations();
+                return Ok(await result.IsLoginValid(UserInfo));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error" + ex.ToString());
+            }
         }
-        */
     }
 }

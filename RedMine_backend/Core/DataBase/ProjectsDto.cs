@@ -26,10 +26,11 @@ namespace RedMine_backend.Core.DataBase
         public int TypeOfProject { get; set; }
     }
 
-    public class ProjectParametesDto
+    public class ProjectParametersDto
     {
         public string Name { set; get; }
-        public int TypeID { get; set; }
+        public DateTime Deadline { set; get; }
         public string Description { set; get; }
+        public int DeveloperID { set; get; }   
     }
 }
