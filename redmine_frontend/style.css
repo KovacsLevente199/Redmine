@@ -1,0 +1,30 @@
+#ProjectList{
+    display: flex;
+    flex-direction: column;
+    background-color: green;
+}
+
+.mainNavbar{
+    background-color: yellow;
+    display: flex;
+    flex-direction: row;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+input[type="checkbox"] {
+    width: 36px;
+    height: 36px;
+}
+
+.taskAddContainer{
+
+}
+
+.projectContainer{
+    display: flex;
+    flex-direction: column;
+}
