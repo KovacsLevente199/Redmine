@@ -204,7 +204,7 @@ namespace RedMine_backend.Core.Services
             {
                 using (var context = new RedmineContext())
                 {
-                    var records = await context.Tasks.ToListAsync();
+                    var records = await context.Tasks.Where(x=> x.UserID == ManagerID).ToListAsync();
 
                     
                     var recordWithMinValue = records.OrderBy(r => r.DeadLine).FirstOrDefault();
