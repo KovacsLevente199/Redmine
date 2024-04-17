@@ -23,7 +23,8 @@ namespace RedMine_backend.Core.Services
                                     ID = ProjectObj.ID,
                                     Name = ProjectObj.Name,
                                     Description = ProjectObj.Description,
-                                    TypeName = TypeObj.Name
+                                    TypeName = TypeObj.Name,
+                                    TypeID = ProjectObj.TypeID
                                 };
 
                     return await result.ToListAsync();
