@@ -49,6 +49,8 @@ namespace RedMine_backend.Core.Services
                                  select new TasksDto
                                  {
                                      Name = b.Name,
+                                     Description = b.Description,
+                                     DeadLine = b.DeadLine
                                  };
                     return await result.ToListAsync();
                 }
