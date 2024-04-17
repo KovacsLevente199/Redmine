@@ -1,30 +1,114 @@
-#ProjectList{
-    display: flex;
-    flex-direction: column;
-    background-color: green;
+:root {
+    --primary-background: #ffffff;
+    --secondary-background: #e8edf3;
 }
 
+body {
+    padding: 64px;
+    margin: 0;
+}
+h1 {
+    margin: 0;
+}
+button {
+    padding: 8px 16px;
+    background-color: #064469;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
 .mainNavbar{
-    background-color: yellow;
     display: flex;
     flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+}
+.filter-bar {
+    margin-top: 64px;
+    margin-bottom: 32px;
+    position: relative;
+    display: flex;
+    justify-content: end;
+}
+
+.filter-dropdown {
+    position: absolute;
+    z-index: 3;
+    background-color: var(--secondary-background);
+    padding: 8px;
+    border-radius: 16px;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.25);
+    top: 48px;
+}
+.logout-btn {
+    height: fit-content;
 }
 
 .checkbox-wrapper {
     display: flex;
     flex-direction: row;
+        align-items: center;
 }
 
 input[type="checkbox"] {
-    width: 36px;
-    height: 36px;
-}
-
-.taskAddContainer{
-
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    border-radius: 8px;
 }
 
 .projectContainer{
     display: flex;
     flex-direction: column;
+    gap: 16px;
+}
+
+.projects-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+.project-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+.project-details {
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    background-color: var(--primary-background);
+    z-index: 1;
+    border-radius: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 16px;
+    box-sizing: border-box;
+}
+.project-title {
+    font-weight: bold;
+    font-size: 24px;
+}
+.create-task-wrapper {
+    margin-top: -16px;
+    z-index: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 8px;
+    padding: 16px;
+    padding-top: 32px;
+    box-sizing: border-box;
+    background-color: var(--secondary-background);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+.add-task-btn {
+    background-color: #9CCDD8;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.201);
 }

@@ -8,23 +8,23 @@
 </head>
 <body>
   <div class="mainNavbar">
-    <div>Szűrés:</div>
-    <div>Itt lesz a menü</div>
+    <h1>Redmine</h1>
+    <button class="logout-btn">Kijelentkezés</button>
   </div>
   <div class="filter-bar">
     <button id="filter-btn" onclick="toggleDropdown()">Szűrők</button>
     <div class="filter-dropdown" id="filter-dropdown" style="visibility: hidden;">
       <div class="checkbox-wrapper">
-        <input type="checkbox" name="" id="">
+        <input type="checkbox" name="" id="" onclick="filterByType(1, this)">
         <p>Webes alkalmazások</p>
       </div>
       <div class="checkbox-wrapper">
-        <input type="checkbox" name="" id="" onclick="filterByType('type2', this)">
+        <input type="checkbox" name="" id="" onclick="filterByType(2, this)">
         <p>Androidos alkalmazások</p>
       </div>
     </div>
   </div>
-  <div id="ProjectList">
+  <div id="ProjectList" class="projects-wrapper">
   </div>
   </div>
   <script src="script.js"></script>
