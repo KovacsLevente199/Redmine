@@ -5,26 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
   <title>Főoldal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="mainNavbar">
-    <div>Szűrés:</div>
-    <div>Itt lesz a menü</div>
+    <h1>Redmine</h1>
+    <div class="expiring-wrapper">
+      <h1>Hamarosan lejár:</h1>
+      <div id="expiring-container"></div>
+    </div>
+    <button class="logout-btn">Kijelentkezés</button>
   </div>
   <div class="filter-bar">
     <button id="filter-btn" onclick="toggleDropdown()">Szűrők</button>
     <div class="filter-dropdown" id="filter-dropdown" style="visibility: hidden;">
       <div class="checkbox-wrapper">
-        <input type="checkbox" name="" id="">
+        <input type="checkbox" name="" id="" onclick="filterByType(1, this)">
         <p>Webes alkalmazások</p>
       </div>
       <div class="checkbox-wrapper">
-        <input type="checkbox" name="" id="" onclick="filterByType('type2', this)">
+        <input type="checkbox" name="" id="" onclick="filterByType(2, this)">
         <p>Androidos alkalmazások</p>
       </div>
     </div>
   </div>
-  <div id="ProjectList">
+  <div id="ProjectList" class="projects-wrapper">
   </div>
   </div>
   <script src="script.js"></script>

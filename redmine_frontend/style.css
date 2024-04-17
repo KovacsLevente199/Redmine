@@ -1,30 +1,178 @@
-#ProjectList{
-    display: flex;
-    flex-direction: column;
-    background-color: green;
+:root {
+  --primary-background: #ffffff;
+  --secondary-background: #e8edf3;
 }
 
-.mainNavbar{
-    background-color: yellow;
-    display: flex;
-    flex-direction: row;
+body {
+  padding: 64px;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+h1 {
+  margin: 0;
+}
+h3 {
+  margin-top: 0;
+  margin-bottom: 4px;
+}
+button {
+  padding: 8px 16px;
+  background-color: #064469;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all ease-in-out 0.2s;
+}
+button:hover {
+  scale: 1.05;
+  transition: all ease-in-out 0.2s;
+}
+.mainNavbar {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.filter-bar {
+  margin-top: 64px;
+  margin-bottom: 32px;
+  position: relative;
+  display: flex;
+  justify-content: end;
+}
+
+.filter-dropdown {
+  position: absolute;
+  z-index: 3;
+  background-color: var(--secondary-background);
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.25);
+  top: 48px;
+}
+.logout-btn {
+  visibility: hidden;
+  height: fit-content;
 }
 
 .checkbox-wrapper {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-input[type="checkbox"] {
-    width: 36px;
-    height: 36px;
+input[type='checkbox'] {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  border-radius: 8px;
 }
 
-.taskAddContainer{
-
+.projectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.projectContainer{
-    display: flex;
-    flex-direction: column;
+.projects-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.project-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.project-details {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  background-color: var(--primary-background);
+  z-index: 1;
+  border-radius: 16px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+  box-sizing: border-box;
+}
+.project-title {
+  font-weight: bold;
+  font-size: 24px;
+}
+.project-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+.create-task-wrapper {
+  margin-top: -16px;
+  z-index: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  gap: 8px;
+  padding: 16px;
+  padding-top: 32px;
+  box-sizing: border-box;
+  background-color: var(--secondary-background);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.add-task-btn {
+  background-color: #9ccdd8;
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.201);
+}
+
+.expiring-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+#expiring-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: rgba(233, 84, 84, 0.502);
+  border-radius: 16px;
+  padding: 16px;
+  box-sizing: border-box;
+  margin-top: 16px;
+}
+
+.tasks-wrapper {
+  margin-top: -16px;
+  z-index: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  gap: 8px;
+  padding: 16px;
+  padding-top: 32px;
+  box-sizing: border-box;
+  background-color: var(--secondary-background);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.task-container {
+  background-color: var(--primary-background);
+  padding: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.list-task-btn {
+  background-color: #9ccdd8;
+  color: #000;
+  border: 1px solid rgba(0, 0, 0, 0.201);
 }

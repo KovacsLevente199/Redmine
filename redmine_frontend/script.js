@@ -1,112 +1,347 @@
+var GLOBALprojectsList = [0];
+
 function populateProjectList(data) {
-    const container = document.getElementById('ProjectList');
+  const container = document.getElementById('ProjectList');
+  container.innerHTML = '';
+  data.forEach((item) => {
+    createProjectContainer(item, container);
+  });
 
-    container.innerHTML = '';
+  generateSoonestTask();
+}
 
-    console.log(data)
+function createProjectContainer(projectRecord, location) {
+  GLOBALprojectsList.push(projectRecord['name']);
 
-    data.forEach(item => {
-        createProjectContainer(item,container);
+  let projectContainer = document.createElement('div');
+  projectContainer.classList.add('project-container');
+  projectContainer.setAttribute('data-project-type', projectRecord['typeID']);
+  projectContainer.setAttribute('data-project-id', projectRecord['id']);
+
+  let projectDetails = document.createElement('div');
+  projectDetails.classList.add('project-details');
+
+  let projectTitlebar = document.createElement('div');
+  projectTitlebar.classList.add('project-title');
+  projectTitlebar.textContent = projectRecord['name'];
+
+  let projectContentArea = document.createElement('div');
+  projectContentArea.classList.add('project-content-area');
+  projectContentArea.textContent = projectRecord['description'];
+
+  let projectfooter = document.createElement('div');
+  projectfooter.classList.add('project-footer');
+
+  let addTaskBtn = document.createElement('button');
+  addTaskBtn.classList.add('add-task-btn');
+  addTaskBtn.textContent = 'Feladat hozzáadása';
+  addTaskBtn.addEventListener('click', (e) => {
+    const parentWrapper = e.target.parentNode.parentNode.parentNode;
+    const createTaskWrapper = parentWrapper.querySelector('.create-task-wrapper');
+    if (createTaskWrapper.style.display === 'none') {
+      createTaskWrapper.style.display = 'flex';
+    } else {
+      createTaskWrapper.style.display = 'none';
+    }
+  });
+
+  projectfooter.appendChild(addTaskBtn);
+
+  let listProjectTasksBtn = document.createElement('button');
+  listProjectTasksBtn.classList.add('list-task-btn');
+  listProjectTasksBtn.textContent = 'Feladatok listázása';
+  projectfooter.appendChild(listProjectTasksBtn);
+
+  listProjectTasksBtn.addEventListener('click', (e) => {
+    const parentWrapper = e.target.parentNode.parentNode.parentNode;
+
+    const createTaskWrapper = parentWrapper.querySelector('.tasks-wrapper');
+
+    if (createTaskWrapper.style.display === 'none') {
+      createTaskWrapper.style.display = 'flex';
+    } else {
+      createTaskWrapper.style.display = 'none';
+    }
+  });
+
+  projectDetails.appendChild(projectTitlebar);
+  projectDetails.appendChild(projectContentArea);
+  projectDetails.appendChild(projectfooter);
+  projectContainer.appendChild(projectDetails);
+  createTaskAddLayout(projectContainer);
+  listAssignedTasks(projectContainer.getAttribute('data-project-id'), projectContainer);
+
+  location.appendChild(projectContainer);
+}
+
+function createTaskAddLayout(appendTo) {
+  let mainContainer = document.createElement('div');
+  mainContainer.classList.add('create-task-wrapper');
+  mainContainer.style.display = 'none';
+
+  let name = document.createElement('div');
+  name.textContent = 'Név';
+  let nameInput = document.createElement('input');
+  nameInput.classList.add('name-input');
+
+  let description = document.createElement('div');
+  description.textContent = 'Leírás';
+  let descriptionInput = document.createElement('input');
+  descriptionInput.classList.add('description-input');
+
+  let time = document.createElement('div');
+  time.textContent = 'Határidő';
+  let timeInput = document.createElement('input');
+  timeInput.classList.add('time-input');
+  timeInput.type = 'date';
+
+  let developer = document.createElement('div');
+  developer.textContent = 'Fejlesztő';
+  let developerSelect = document.createElement('select');
+  developerSelect.classList.add('developer-input');
+
+  fetch('https://localhost:7295/RedMineDataList/listdevelopers', {
+    method: 'POST',
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      data.forEach((developer) => {
+        let option = document.createElement('option');
+        option.value = developer.id;
+        option.textContent = developer.name;
+        developerSelect.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+
+  let submitButton = document.createElement('button');
+  submitButton.textContent = 'Küldés';
+  submitButton.classList.add('submit-btn');
+  submitButton.addEventListener('click', (event) => {
+    const taskWrapper = event.target.parentNode;
+    const data = {
+      name: taskWrapper.querySelector('.name-input').value.toString(),
+      deadline: new Date(taskWrapper.querySelector('.time-input').value).toISOString(),
+      projectID: taskWrapper.parentNode.getAttribute('data-project-id'),
+      description: taskWrapper.querySelector('.description-input').value.toString(),
+      developerID: taskWrapper.querySelector('.developer-input').value,
+    };
+    submitTask(data);
+  });
+
+  mainContainer.appendChild(name);
+  mainContainer.appendChild(nameInput);
+  mainContainer.appendChild(description);
+  mainContainer.appendChild(descriptionInput);
+  mainContainer.appendChild(time);
+  mainContainer.appendChild(timeInput);
+  mainContainer.appendChild(developer);
+  mainContainer.appendChild(developerSelect);
+  mainContainer.appendChild(submitButton);
+
+  appendTo.appendChild(mainContainer);
+}
+
+function submitTask(data) {
+  fetch('https://localhost:7295/RedMineDataList/addtask', {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      data.forEach((developer) => {
+        let option = document.createElement('option');
+        option.value = developer.id;
+        option.textContent = developer.name;
+        developerSelect.appendChild(option);
+      });
+    })
+    .catch((error) => {
+      console.error('Error:', error);
     });
 }
 
-function createProjectContainer(projectRecord,location)
-{
-    let projectContainer = document.createElement('div');
-    projectContainer.classList.add('projectContainer');
-
-    let projectTitlebar = document.createElement('div');
-    projectTitlebar.classList.add('projectTitlebar');
-    projectTitlebar.textContent = projectRecord["name"];
-
-    let projectContentArea = document.createElement('div');
-    projectContentArea.classList.add('projectContentArea');
-    projectContentArea.textContent = projectRecord["description"];
-
-    let projectfooter = document.createElement('div');
-    projectfooter.classList.add('projectfooter');
-    projectfooter.textContent = "Feladat hozzáadása"
-
-    projectContainer.appendChild(projectTitlebar);
-    projectContainer.appendChild(projectContentArea);
-    projectContainer.appendChild(projectfooter);
-    
-    location.appendChild(projectContainer);
-}
-
-function createTaskAddLayout(appendTo)
-{
-    console.log("lefut")
-    let mainContainer = document.createElement('div');
-    mainContainer.classList.add('taskAddContainer')
-
-    let title = document.createElement('h1');
-    title.textContent = "Feladat létrehozása";
-
-    let name = document.createElement('div');
-    name.textContent ="Név";
-    let nameInput = document.createElement('input');
-
-    let description = document.createElement('div');
-    description.textContent = "Leírás"
-    let descriptionInput = document.createElement('input');
-
-    let developer = document.createElement('div');
-    developer.textContent = "Fejlesztő";
-
-    let developerSelect = document.createElement('select');
-
-    mainContainer.appendChild(title);
-    mainContainer.appendChild(name);
-    mainContainer.appendChild(nameInput);
-    mainContainer.appendChild(description);
-    mainContainer.appendChild(descriptionInput);
-    mainContainer.appendChild(developer);
-    mainContainer.appendChild(developerSelect);
-    appendTo.appendChild(mainContainer)
-}
-
-function loadWithGet(address,helperFunction)
-{
-    fetch(address)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
+function loadWithGet(address, helperFunction) {
+  fetch(address)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
     })
-    .then(data => {
-        helperFunction(data);
+    .then((data) => {
+      helperFunction(data);
     })
-    .catch(error => {
-        console.error('Error:', error);
+    .catch((error) => {
+      console.error('Error:', error);
     });
 }
 
-function startUp()
-{
-    loadWithGet('http://localhost:5136/RedMineDataList/loadinitial', populateProjectList)
+function startUp() {
+  loadWithGet('http://localhost:5136/RedMineDataList/loadinitial', populateProjectList);
+}
+
+function filterByType(type, checkbox) {
+  if (checkbox.checked) {
+    document.querySelectorAll('.project-container').forEach((element) => {
+      if (element.getAttribute('data-project-type') !== type.toString()) {
+        element.style.display = 'none';
+      }
+    });
+  } else {
+    document.querySelectorAll('.project-container').forEach((element) => {
+      if (element.getAttribute('data-project-type') !== type.toString()) {
+        element.style.display = 'flex';
+      }
+    });
+  }
+}
+
+function toggleDropdown() {
+  const dropdown = document.getElementById('filter-dropdown');
+
+  if (dropdown.style.visibility === 'hidden') {
+    dropdown.style.visibility = 'visible';
+  } else {
+    dropdown.style.visibility = 'hidden';
+  }
+}
+
+function generateSoonestTask() {
+  const url = 'https://localhost:7295/RedMineDataList/taskdeadline';
+  const data = {
+    userID: 1,
+  };
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  fetch(url, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      generateTaskContainer(data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+function formatDate(dateStr) {
+  const date = new Date(dateStr);
+  const formattedDate = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
+  return formattedDate;
+}
+
+function generateTaskContainer(record) {
+  console.log(record);
+  let displayNode = document.getElementById('expiring-container');
+
+  let projectName = document.createElement('h3');
+  projectName.textContent = GLOBALprojectsList[record['projectID']];
+  let taskName = document.createElement('div');
+  taskName.textContent = record['name'];
+
+  let taskDesc = document.createElement('div');
+  taskDesc.textContent = record['description'];
+  let taskExpiration = document.createElement('div');
+  taskDesc.textContent = 'Lejárat: ' + formatDate(record['deadLine']);
+
+  displayNode.appendChild(projectName);
+  displayNode.appendChild(taskName);
+  displayNode.appendChild(taskDesc);
+  displayNode.appendChild(taskExpiration);
+}
+
+function listAssignedTasks(param, parentnode) {
+  const url = 'https://localhost:7295/RedMineDataList/assignedtasks';
+
+  const data = {
+    projectID: param,
+  };
+
+  const options = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  };
+
+  fetch(url, options)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      let tasksWrapper = document.createElement('div');
+      tasksWrapper.classList.add('tasks-wrapper');
+      tasksWrapper.style.display = 'none';
+
+      data.forEach((element) => {
+        let taskContrainer = document.createElement('div');
+        taskContrainer.classList.add('task-container');
+
+        let taskName = document.createElement('div');
+        taskName.textContent = 'Név: ' + element.name;
+
+        let taskDesc = document.createElement('div');
+        taskDesc.textContent = 'Leírás: ' + element.description;
+
+        taskContrainer.appendChild(taskName);
+        taskContrainer.appendChild(taskDesc);
+        tasksWrapper.appendChild(taskContrainer);
+      });
+
+      parentnode.appendChild(tasksWrapper);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
+function createTasks(data, parentnode) {
+  let taskContrainer = document.createElement('div');
+  taskContrainer.classList.add('task-container');
+  taskContrainer.style.display = 'none';
+
+  let taskName = document.createElement('div');
+  taskName.textContent = 'Név: ' + data.name;
+
+  let taskDesc = document.createElement('div');
+  taskDesc.textContent = 'Leírás: ' + data.description;
+
+  taskContrainer.appendChild(taskName);
+  taskContrainer.appendChild(taskDesc);
+  parentnode.appendChild(taskContrainer);
 }
 
 startUp();
-
-
-// function filterByType(type, checkbox) {
-//     if (checkbox.checked) {
-//         // Filters by type
-//     } else {
-//         // Removes filter by type
-//     }
-// }
-
-// function toggleDropdown() {
-
-//     const dropdown = document.getElementById("filter-dropdown");
-
-//     if (dropdown.style.visibility === "hidden") {
-//         dropdown.style.visibility = "visible"
-//     } else {
-//         dropdown.style.visibility = "hidden"
-//     }
-
-// }
