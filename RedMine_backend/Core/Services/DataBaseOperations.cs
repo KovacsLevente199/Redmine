@@ -50,7 +50,8 @@ namespace RedMine_backend.Core.Services
                                  {
                                      Name = b.Name,
                                      Description = b.Description,
-                                     DeadLine = b.DeadLine
+                                     DeadLine = b.DeadLine,
+                                     ProjectID = b.ProjectID
                                  };
                     return await result.ToListAsync();
                 }
