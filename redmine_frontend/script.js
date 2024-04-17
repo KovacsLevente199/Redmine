@@ -1,14 +1,19 @@
+var GLOBALprojectsList = [0];
+
 function populateProjectList(data) {
     const container = document.getElementById('ProjectList');
     container.innerHTML = '';
     data.forEach(item => {
         createProjectContainer(item,container);
     });
+
+    generateSoonestTask();
 }
 
 function createProjectContainer(projectRecord,location)
 {
-
+    GLOBALprojectsList.push(projectRecord["name"])
+    
     let projectContainer = document.createElement('div');
     projectContainer.classList.add('project-container');
     projectContainer.setAttribute('data-project-type', projectRecord["typeID"]);
@@ -33,7 +38,6 @@ function createProjectContainer(projectRecord,location)
     addTaskBtn.classList.add('add-task-btn');
     addTaskBtn.textContent = "Feladat hozzáadása"
     addTaskBtn.addEventListener("click", (e) => {
-        console.log(e.target)
         const parentWrapper = e.target.parentNode.parentNode.parentNode;
         const createTaskWrapper = parentWrapper.querySelector(".create-task-wrapper");
         if (createTaskWrapper.style.display === "none") {
@@ -45,15 +49,36 @@ function createProjectContainer(projectRecord,location)
 
     })
 
-    projectfooter.appendChild(addTaskBtn)
-
+    projectfooter.appendChild(addTaskBtn);
+    
     
 
+    let listProjectTasksBtn = document.createElement('button');
+    listProjectTasksBtn.classList.add('list-task-btn');
+    listProjectTasksBtn.textContent = 'Feladatok listázása';
+    projectfooter.appendChild(listProjectTasksBtn);
+    
+    
+    listProjectTasksBtn.addEventListener("click", (e) => {
+        const parentWrapper = e.target.parentNode.parentNode.parentNode;
+        
+        const createTaskWrapper = parentWrapper.querySelector(".list-assigned-tasks-wrapper");
+        
+        if (createTaskWrapper.style.display === "none") {
+            createTaskWrapper.style.display = "flex"
+        } else {
+             createTaskWrapper.style.display = "none"
+        }  
+    })
+    
+    
+    
     projectDetails.appendChild(projectTitlebar);
     projectDetails.appendChild(projectContentArea);
     projectDetails.appendChild(projectfooter);
     projectContainer.appendChild(projectDetails);
     createTaskAddLayout(projectContainer)
+    listAssignedTasks(projectContainer.getAttribute('data-project-id'),projectContainer)
     
     location.appendChild(projectContainer);
 }
@@ -189,8 +214,6 @@ function startUp()
     loadWithGet('http://localhost:5136/RedMineDataList/loadinitial', populateProjectList)
 }
 
-startUp();
-
 
 function filterByType(type, checkbox) {
     if (checkbox.checked) {
@@ -200,7 +223,7 @@ function filterByType(type, checkbox) {
             }
         })
         console.log(type)
-        // Filters by type  
+        
     } else {
         document.querySelectorAll(".project-container").forEach((element) => {
             if (element.getAttribute('data-project-type') !== type.toString()) {
@@ -221,3 +244,108 @@ function toggleDropdown() {
     }
 
 }
+
+function generateSoonestTask(){
+    const url = 'https://localhost:7295/RedMineDataList/taskdeadline';
+const data = {
+    userID:1
+};
+
+const options = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+};
+
+fetch(url, options)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        generateTaskContainer(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+
+}
+
+function generateTaskContainer(record)
+{
+    let displayNode = document.getElementById('expiring-container');
+
+    let projectName = document.createElement('h3');
+    projectName.textContent = GLOBALprojectsList[record['projectID']]
+    let taskName = document.createElement('div');
+    taskName.textContent = record['name']
+
+    let taskDesc = document.createElement('div');
+    taskDesc.textContent = record['description'];
+
+    displayNode.appendChild(projectName);
+    displayNode.appendChild(taskName);
+    displayNode.appendChild(taskDesc);
+}
+
+
+function listAssignedTasks(param,parentnode)
+{
+    const url = 'https://localhost:7295/RedMineDataList/assignedtasks'; 
+
+
+const data = {
+    "projectID": param
+};
+
+
+const options = {
+    method: 'POST', 
+    headers: {
+        'Content-Type': 'application/json' 
+    },
+    body: JSON.stringify(data) 
+};
+
+fetch(url, options)
+    .then(response => {
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        return response.json();
+    })
+    .then(data => {
+        generateTaskRecords(data,parentnode);
+    })
+    .catch(error => {
+
+        console.error('Error:', error);
+    });
+
+}
+
+function generateTaskRecords(data ,node)
+{
+    console.log(data[0]);
+    let taskContrainer = document.createElement('div');
+    taskContrainer.classList.add('list-assigned-tasks-wrapper');
+    taskContrainer.style.display = "none"
+
+    let taskName = document.createElement('div');
+    taskName.textContent ="Név: " + data['name'];
+    
+    let taskDesc = document.createElement('div');
+    taskDesc.textContent = "Leírás: "+ data['description'];  
+
+    taskContrainer.appendChild(taskName);
+    taskContrainer.appendChild(taskDesc)
+    node.appendChild(taskContrainer);
+}
+
+startUp();

@@ -112,3 +112,31 @@ input[type="checkbox"] {
     color: #000;
     border: 1px solid rgba(0, 0, 0, 0.201);
 }
+
+.expiring-wrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.list-assigned-tasks-wrapper{
+    margin-top: -16px;
+    z-index: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 8px;
+    padding: 16px;
+    padding-top: 32px;
+    box-sizing: border-box;
+    background-color: var(--secondary-background);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    border-bottom-left-radius: 16px;
+    border-bottom-right-radius: 16px;
+}
+
+.list-task-btn{
+    background-color: #9CCDD8;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.201);
+}
