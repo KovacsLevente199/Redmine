@@ -21,13 +21,13 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = "your-issuer",
-        ValidAudience = "your-audience",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
+       // ValidateIssuer = true,
+        //ValidateAudience = true,
+        //ValidateLifetime = true,
+       // ValidateIssuerSigningKey = true,
+       // ValidIssuer = "your-issuer",
+        //ValidAudience = "your-audience",
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
     };
 });
 

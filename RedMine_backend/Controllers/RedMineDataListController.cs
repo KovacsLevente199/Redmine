@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using RedMine_backend.Core.Services.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace RedMine_backend.Controllers
 {
@@ -25,6 +26,7 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpGet("loadinitial")]
+        [Authorize]
         public async Task<IActionResult> LoadInitialData()
         {    
             DataBaseOperations result = new DataBaseOperations();
@@ -107,6 +109,7 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("listdevelopers")]
+        [Authorize]
         public async Task<IActionResult> ListDevelopers()
         {
             try
@@ -130,7 +133,8 @@ namespace RedMine_backend.Controllers
                 if(await result.IsLoginValid(UserInfo))
                 {
                     var token = AuthenticationServices.GenerateJwtToken(UserInfo.UserName);
-                    return Ok(new { token });
+                    HttpContext.Response.Headers.Authorization = token;
+                    return Ok();
                 }
                 else
                 {
