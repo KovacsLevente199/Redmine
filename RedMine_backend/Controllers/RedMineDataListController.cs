@@ -5,6 +5,11 @@ using RedMine_backend.Core.Services;
 using System.Text.Json;
 using RedMine_backend.Core.DataBase;
 using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using RedMine_backend.Core.Services.Authentication;
 
 namespace RedMine_backend.Controllers
 {
@@ -121,7 +126,16 @@ namespace RedMine_backend.Controllers
             try
             {
                 DataBaseOperations result = new DataBaseOperations();
-                return Ok(await result.IsLoginValid(UserInfo));
+
+                if(await result.IsLoginValid(UserInfo))
+                {
+                    var token = AuthenticationServices.GenerateJwtToken(UserInfo.UserName);
+                    return Ok(new { token });
+                }
+                else
+                {
+                    return Unauthorized();
+                }
             }
             catch (Exception ex)
             {

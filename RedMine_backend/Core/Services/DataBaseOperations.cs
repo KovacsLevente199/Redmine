@@ -4,6 +4,10 @@ using RedMine_backend.Core.DataBase;
 using System.Text.Json;
 using System.Xml;
 using RedMine_backend.Core.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace RedMine_backend.Core.Services
 {
@@ -138,7 +142,7 @@ namespace RedMine_backend.Core.Services
             }
         }
 
-        public  async Task<int> IsLoginValid(UserDataDto loginData)
+        public  async Task<bool> IsLoginValid(UserDataDto loginData)
         {
             try
             {
@@ -147,11 +151,11 @@ namespace RedMine_backend.Core.Services
                     bool result = await context.Managers.AnyAsync(x => (x.Name == loginData.UserName) && (x.Password == loginData.Password));
                     if(result)
                     {
-                        return 0;
+                        return true;
                     }
                     else
                     {
-                        return 1;
+                        return false;
                     }
                 }
             }
