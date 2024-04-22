@@ -35,6 +35,7 @@ namespace RedMine_backend.Controllers
 
 
         [HttpPost("filter")]
+        [Authorize]
         public async Task<IActionResult> Filter(ProjectType Tid) 
         {
             try
@@ -52,6 +53,7 @@ namespace RedMine_backend.Controllers
 
 
         [HttpPost("assignedtasks")]
+        [Authorize]
         public async Task<IActionResult> AssignedTasks(ProjectNameDto Pid)
         {
             try
@@ -67,6 +69,7 @@ namespace RedMine_backend.Controllers
         
         
         [HttpPost("addtask")]
+        [Authorize]
         public async Task<IActionResult> addtask(ProjectParametersDto ProjectData)
         {
             try
@@ -81,6 +84,7 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("tasksbymanager")]
+        [Authorize]
         public async Task<IActionResult> TasksByManager(TasksParamDto taskobj)
         {
             try
@@ -95,6 +99,7 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("taskdeadline")]
+        [Authorize]
         public async Task<IActionResult> TaskDeadLine(TasksParamDto taskobj)
         {
             try
@@ -124,6 +129,7 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(UserDataDto UserInfo)
         {
             try

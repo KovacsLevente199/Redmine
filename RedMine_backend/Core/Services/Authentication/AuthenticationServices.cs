@@ -8,27 +8,23 @@ namespace RedMine_backend.Core.Services.Authentication
 {
     public class AuthenticationServices
     {
+        private readonly static  string secret = "ThisIsTestKey123456789hdkasbdajkhbdkjahsbdjkhsajadshbkshj";
         public static string GenerateJwtToken(string userId)
         {
-            var secKey = GenerateHmacKey();
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(secKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim(secKey, userId) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("UserID", userId) }),
                 Expires = DateTime.UtcNow.AddHours(1),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(GenerateSecret()), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
 
-        public static string GenerateHmacKey()
+        public static byte[] GenerateSecret()
         {
-            using (var hmac = new HMACSHA256())
-            {
-                return Convert.ToBase64String(hmac.Key);
-            }
+            return Encoding.UTF8.GetBytes(secret);
         }
     }
 }

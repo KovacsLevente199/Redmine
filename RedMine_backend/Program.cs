@@ -1,6 +1,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
+using RedMine_backend.Core.Services.Authentication;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,13 +22,11 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-       // ValidateIssuer = true,
-        //ValidateAudience = true,
-        //ValidateLifetime = true,
-       // ValidateIssuerSigningKey = true,
-       // ValidIssuer = "your-issuer",
-        //ValidAudience = "your-audience",
-        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(AuthenticationServices.GenerateSecret())
     };
 });
 
