@@ -9,12 +9,25 @@ namespace RedMine_backend.Core.Services.Authentication
     public class AuthenticationServices
     {
         private readonly static  string secret = "ThisIsTestKey123456789hdkasbdajkhbdkjahsbdjkhsajadshbkshj";
-        public static string GenerateJwtToken(string userId)
+        public static string GenerateJwtToken(string userId, bool admin)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+            Claim AdminProperty = null;
+            if (admin)
+            {
+                AdminProperty = new Claim(ClaimTypes.Role, "admin");
+            }
+            else
+            {
+                AdminProperty = new Claim(ClaimTypes.Role, "guest");
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("UserID", userId) }),
+                Subject = new ClaimsIdentity(new[] { 
+                    new Claim(ClaimTypes.Name, userId),
+                    AdminProperty
+                }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(GenerateSecret()), SecurityAlgorithms.HmacSha256Signature)
             };

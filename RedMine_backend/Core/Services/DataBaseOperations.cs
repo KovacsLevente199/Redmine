@@ -224,5 +224,23 @@ namespace RedMine_backend.Core.Services
                 throw;
             }
         }
+
+        public async Task<bool> IsAdmin(string userId)
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    bool isAdmin = await context.Managers
+                        .AnyAsync(user => user.Name == userId && user.IsAdmin == 1 );
+                    return isAdmin;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex + " Error from IsAdmin");
+                throw;
+            }
+        }
     }
 }

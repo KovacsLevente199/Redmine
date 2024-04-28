@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Text;
 using RedMine_backend.Core.Services.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace RedMine_backend.Controllers
 {
@@ -19,6 +20,7 @@ namespace RedMine_backend.Controllers
     public class RedMineDataList : ControllerBase
     {
         private readonly ILogger<RedMineDataList> _logger;
+
 
         public RedMineDataList(ILogger<RedMineDataList> logger)
         {
@@ -69,7 +71,7 @@ namespace RedMine_backend.Controllers
         
         
         [HttpPost("addtask")]
-        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> addtask(ProjectParametersDto ProjectData)
         {
             try
@@ -114,7 +116,6 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("listdevelopers")]
-        [Authorize]
         public async Task<IActionResult> ListDevelopers()
         {
             try
@@ -138,7 +139,12 @@ namespace RedMine_backend.Controllers
 
                 if(await result.IsLoginValid(UserInfo))
                 {
-                    var token = AuthenticationServices.GenerateJwtToken(UserInfo.UserName);
+                    bool admin = false;
+                    if(result.IsAdmin(UserInfo.UserName).Result)
+                    {
+                        admin = true;
+                    }
+                    var token = AuthenticationServices.GenerateJwtToken(UserInfo.UserName,admin);
                     HttpContext.Response.Headers.Authorization = token;
                     return Ok();
                 }
