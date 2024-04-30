@@ -7,11 +7,22 @@ A futtatáshoz szükséges csomagok:
 
 
 ---------------------------------------------------------------------------------------------
-2.Beadandó
+3.Beadandó
 
 Futtatása:
 	
 	1.Lépés: El kell indítani a RedMine_backend.sln-t
 	2.Lépés: Elindítani https módban a debugot
-	3.Megnyitni a RedMine_frontendbe dashboard.html fájlt.
+	3.Megnyitni a RedMine_frontendbe index.html fájlt.
+
+A belépéshez 3 példafelhasználó lett létrehozva:
+Felhasználónév |	jelszó
+Menedzser2:	pass123 <--Vendég felhasználó
+Menedzser1:	pw123 <--admin
+Menedzser3:	pword123 <-- admin
+
+Két szerepkör adott:
+Vendég: Csak olvashatja az adatokat, nem módosíthat, nem adhat hozzá.
+Admin: Ugyanaz mint a vendég, de rendelhet a projektekhez feladatokat.
+
 

@@ -14,7 +14,7 @@ namespace RedMine_backend.Core.DataBase
     public class ProjectTypeDto
     {
         public int ID { get; set; }
-        string Name { set; get; }
+        public string Name { set; get; }
     }
     
     public class ProjectNameDto
@@ -32,6 +32,7 @@ namespace RedMine_backend.Core.DataBase
         public DateTime Deadline { set; get; }
         public int ProjectID { set; get; }
         public string Description { set; get; }
-        public int DeveloperID { set; get; }   
+        public int DeveloperID { set; get; }
+        public int UserID { set; get; }
     }
 }

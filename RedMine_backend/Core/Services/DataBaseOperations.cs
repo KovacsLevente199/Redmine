@@ -111,6 +111,7 @@ namespace RedMine_backend.Core.Services
                         DeveloperID = NewDataBase.DeveloperID,
                         ProjectID = NewDataBase.ProjectID,
                         DeadLine = NewDataBase.Deadline,
+                        UserID = NewDataBase.UserID
                     };
 
                     context.Tasks.Add(task);
@@ -126,13 +127,13 @@ namespace RedMine_backend.Core.Services
             }
         }
 
-        public async Task<List<Tasks>> CreatedByManager(int ManagerID)
+        public async Task<List<Tasks>> CreatedByManager(int ManagerID,int proid)
         {
             try
             {
                 using (var context = new RedmineContext())
                 {
-                    return await context.Tasks.Where(x => x.UserID == ManagerID).ToListAsync();
+                    return await context.Tasks.Where(x => (x.UserID == ManagerID) && (x.ProjectID == proid)).ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -239,6 +240,32 @@ namespace RedMine_backend.Core.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex + " Error from IsAdmin");
+                throw;
+            }
+        }
+
+        public async Task<int> ManagerIDByName(string name)
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    var manager = await context.Managers
+                .FirstOrDefaultAsync(m => m.Name == name);
+
+                    if (manager != null)
+                    {
+                        return manager.ID;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred in QueryDevelopers: " + ex.Message);
                 throw;
             }
         }

@@ -77,7 +77,8 @@ namespace RedMine_backend.Controllers
             try
             {
                 DataBaseOperations result = new DataBaseOperations();
-                return Ok(await result.AddToDatabase(ProjectData));
+                await result.AddToDatabase(ProjectData);
+                return Ok(ProjectData);
             }
             catch (Exception ex)
             {
@@ -92,7 +93,9 @@ namespace RedMine_backend.Controllers
             try
             {
                 DataBaseOperations result = new DataBaseOperations();
-                return Ok(await result.CreatedByManager(taskobj.UserID));
+                Console.WriteLine("Menedzserid");
+                Console.WriteLine(taskobj.UserID);
+                return Ok(await result.CreatedByManager(taskobj.UserID,taskobj.ProjectID));
             }
             catch (Exception ex)
             {
@@ -146,7 +149,7 @@ namespace RedMine_backend.Controllers
                     }
                     var token = AuthenticationServices.GenerateJwtToken(UserInfo.UserName,admin);
                     HttpContext.Response.Headers.Authorization = token;
-                    return Ok();
+                    return Ok(token);
                 }
                 else
                 {
