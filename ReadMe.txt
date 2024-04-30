@@ -4,7 +4,8 @@ A futtatáshoz szükséges csomagok:
 -.NET 8.0
 -Microsoft.EntityFrameworkCore (8.0.3)
 -Microsoft.EntityFrameworkCore.Sqlite (8.0.3)
-
+-Microsoft.AspNetCore.Authentication.JwtBearer (8.0.3)
+-Microsoft.IdentityModel.JsonWebTokens (7.5.1)
 
 ---------------------------------------------------------------------------------------------
 3.Beadandó
