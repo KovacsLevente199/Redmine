@@ -4,6 +4,10 @@ using RedMine_backend.Core.DataBase;
 using System.Text.Json;
 using System.Xml;
 using RedMine_backend.Core.Entities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace RedMine_backend.Core.Services
 {
@@ -23,7 +27,8 @@ namespace RedMine_backend.Core.Services
                                     ID = ProjectObj.ID,
                                     Name = ProjectObj.Name,
                                     Description = ProjectObj.Description,
-                                    TypeName = TypeObj.Name
+                                    TypeName = TypeObj.Name,
+                                    TypeID = ProjectObj.TypeID
                                 };
 
                     return await result.ToListAsync();
@@ -48,6 +53,9 @@ namespace RedMine_backend.Core.Services
                                  select new TasksDto
                                  {
                                      Name = b.Name,
+                                     Description = b.Description,
+                                     DeadLine = b.DeadLine,
+                                     ProjectID = b.ProjectID
                                  };
                     return await result.ToListAsync();
                 }
@@ -103,6 +111,7 @@ namespace RedMine_backend.Core.Services
                         DeveloperID = NewDataBase.DeveloperID,
                         ProjectID = NewDataBase.ProjectID,
                         DeadLine = NewDataBase.Deadline,
+                        UserID = NewDataBase.UserID
                     };
 
                     context.Tasks.Add(task);
@@ -118,13 +127,13 @@ namespace RedMine_backend.Core.Services
             }
         }
 
-        public async Task<List<Tasks>> CreatedByManager(int ManagerID)
+        public async Task<List<Tasks>> CreatedByManager(int ManagerID,int proid)
         {
             try
             {
                 using (var context = new RedmineContext())
                 {
-                    return await context.Tasks.Where(x => x.UserID == ManagerID).ToListAsync();
+                    return await context.Tasks.Where(x => (x.UserID == ManagerID) && (x.ProjectID == proid)).ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -134,7 +143,7 @@ namespace RedMine_backend.Core.Services
             }
         }
 
-        public  async Task<int> IsLoginValid(UserDataDto loginData)
+        public  async Task<bool> IsLoginValid(UserDataDto loginData)
         {
             try
             {
@@ -143,11 +152,11 @@ namespace RedMine_backend.Core.Services
                     bool result = await context.Managers.AnyAsync(x => (x.Name == loginData.UserName) && (x.Password == loginData.Password));
                     if(result)
                     {
-                        return 0;
+                        return true;
                     }
                     else
                     {
-                        return 1;
+                        return false;
                     }
                 }
             }
@@ -203,7 +212,7 @@ namespace RedMine_backend.Core.Services
             {
                 using (var context = new RedmineContext())
                 {
-                    var records = await context.Tasks.ToListAsync();
+                    var records = await context.Tasks.Where(x=> x.UserID == ManagerID).ToListAsync();
 
                     
                     var recordWithMinValue = records.OrderBy(r => r.DeadLine).FirstOrDefault();
@@ -213,6 +222,50 @@ namespace RedMine_backend.Core.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex + "Failed to load initial data");
+                throw;
+            }
+        }
+
+        public async Task<bool> IsAdmin(string userId)
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    bool isAdmin = await context.Managers
+                        .AnyAsync(user => user.Name == userId && user.IsAdmin == 1 );
+                    return isAdmin;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex + " Error from IsAdmin");
+                throw;
+            }
+        }
+
+        public async Task<int> ManagerIDByName(string name)
+        {
+            try
+            {
+                using (var context = new RedmineContext())
+                {
+                    var manager = await context.Managers
+                .FirstOrDefaultAsync(m => m.Name == name);
+
+                    if (manager != null)
+                    {
+                        return manager.ID;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred in QueryDevelopers: " + ex.Message);
                 throw;
             }
         }

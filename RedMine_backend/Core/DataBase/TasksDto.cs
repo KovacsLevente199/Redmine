@@ -14,6 +14,7 @@ namespace RedMine_backend.Core.DataBase
 
     public class TasksParamDto
     {
-        public int UserID { get; set;} 
+        public int UserID { get; set;}
+        public int ProjectID { get; set;}
     }
 }

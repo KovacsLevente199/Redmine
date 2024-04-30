@@ -5,6 +5,13 @@ using RedMine_backend.Core.Services;
 using System.Text.Json;
 using RedMine_backend.Core.DataBase;
 using System.Security.Cryptography;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using RedMine_backend.Core.Services.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace RedMine_backend.Controllers
 {
@@ -14,12 +21,14 @@ namespace RedMine_backend.Controllers
     {
         private readonly ILogger<RedMineDataList> _logger;
 
+
         public RedMineDataList(ILogger<RedMineDataList> logger)
         {
             _logger = logger;
         }
 
         [HttpGet("loadinitial")]
+        [Authorize]
         public async Task<IActionResult> LoadInitialData()
         {    
             DataBaseOperations result = new DataBaseOperations();
@@ -28,6 +37,7 @@ namespace RedMine_backend.Controllers
 
 
         [HttpPost("filter")]
+        [Authorize]
         public async Task<IActionResult> Filter(ProjectType Tid) 
         {
             try
@@ -45,6 +55,7 @@ namespace RedMine_backend.Controllers
 
 
         [HttpPost("assignedtasks")]
+        [Authorize]
         public async Task<IActionResult> AssignedTasks(ProjectNameDto Pid)
         {
             try
@@ -60,12 +71,14 @@ namespace RedMine_backend.Controllers
         
         
         [HttpPost("addtask")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> addtask(ProjectParametersDto ProjectData)
         {
             try
             {
                 DataBaseOperations result = new DataBaseOperations();
-                return Ok(await result.AddToDatabase(ProjectData));
+                await result.AddToDatabase(ProjectData);
+                return Ok(ProjectData);
             }
             catch (Exception ex)
             {
@@ -74,12 +87,15 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("tasksbymanager")]
+        [Authorize]
         public async Task<IActionResult> TasksByManager(TasksParamDto taskobj)
         {
             try
             {
                 DataBaseOperations result = new DataBaseOperations();
-                return Ok(await result.CreatedByManager(taskobj.UserID));
+                Console.WriteLine("Menedzserid");
+                Console.WriteLine(taskobj.UserID);
+                return Ok(await result.CreatedByManager(taskobj.UserID,taskobj.ProjectID));
             }
             catch (Exception ex)
             {
@@ -88,6 +104,7 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("taskdeadline")]
+        [Authorize]
         public async Task<IActionResult> TaskDeadLine(TasksParamDto taskobj)
         {
             try
@@ -116,12 +133,28 @@ namespace RedMine_backend.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(UserDataDto UserInfo)
         {
             try
             {
                 DataBaseOperations result = new DataBaseOperations();
-                return Ok(await result.IsLoginValid(UserInfo));
+
+                if(await result.IsLoginValid(UserInfo))
+                {
+                    bool admin = false;
+                    if(result.IsAdmin(UserInfo.UserName).Result)
+                    {
+                        admin = true;
+                    }
+                    var token = AuthenticationServices.GenerateJwtToken(UserInfo.UserName,admin);
+                    HttpContext.Response.Headers.Authorization = token;
+                    return Ok(token);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
             }
             catch (Exception ex)
             {
