@@ -21,7 +21,10 @@ function loginUser() {
             sessionStorage.setItem('token', authToken);
             window.location.href = "dashboard.html";
         }
-        window.alert("Helytelen felhasználó név vagy jelszó!")
+        else{
+            window.alert("Helytelen felhasználó név vagy jelszó!");
+        }
+        
     })
     .catch(error => {
         console.error('There has been a problem with your fetch operation:', error);
