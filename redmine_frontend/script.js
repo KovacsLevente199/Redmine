@@ -258,7 +258,9 @@
     const data = {
       userID: getCurrentUserID(),
     };
-
+    
+    querryWebSocket(`wss://localhost:7295/api/ws?Authorization=${jwtString}`);
+    
     const options = {
       method: 'POST',
       headers: {
@@ -471,4 +473,34 @@ function TasksByMe(usid,projid, parentnode)
     });
 }
 
+function querryWebSocket(address) {
+  const socket = new WebSocket(`wss://localhost:7295/api/ws`);
+
+  // Event listener for when the WebSocket connection is open
+  socket.onopen = function(event) {
+    const parameters = { 
+      parameter1: getCurrentUserID(),
+    };
+    // Send data only after the connection is open
+    socket.send(JSON.stringify(parameters));
+  };
+
+
+  // Event listener for when a message is received from the server
+  socket.onmessage = function(event) {
+    const data = JSON.parse(event.data);
+    console.log("megkap")
+    console.log('Received data:', data);
+  };
+
+  // Event listener for errors
+  socket.onerror = function(error) {
+    console.error('WebSocket error:', error);
+  };
+
+  // Event listener for when the WebSocket connection is closed
+  socket.onclose = function(event) {
+    console.log('Connection closed:', event);
+  };
+}
 startUp();

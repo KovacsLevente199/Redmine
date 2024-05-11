@@ -2,6 +2,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using RedMine_backend.Core.Services.Authentication;
+using RedMine_backend.Controllers;
+using WebSocketApiControllerExample;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -31,6 +33,11 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+var connectionFactory = new ConnectionFactory();
+var connectionManager = new ConnectionManager();
+builder.Services.AddScoped(ctx => new WebSocketApiController(connectionFactory, connectionManager));
+builder.Services.AddControllers().AddControllersAsServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,6 +47,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseCors(x => x
             .AllowAnyOrigin()
             .AllowAnyMethod()
@@ -47,11 +55,18 @@ app.UseCors(x => x
              .WithExposedHeaders("Authorization")
             );
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+//app.UseDeveloperExceptionPage();
+app.UseHsts();
+
+app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(30) });
+app.UseRouting();
 app.MapControllers();
+app.UseAuthorization();
 
 app.Run();
