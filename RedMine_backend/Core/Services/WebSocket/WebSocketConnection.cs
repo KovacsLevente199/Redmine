@@ -1,4 +1,5 @@
-﻿using RedMine_backend.Core.Services;
+﻿using RedMine_backend.Core.DataBase;
+using RedMine_backend.Core.Services;
 using System;
 using System.IO;
 using System.Net.WebSockets;
@@ -35,9 +36,20 @@ namespace WebSocketApiControllerExample
                     message = await ReceiveMessage(memoryStream);
                     if (message.Count > 0)
                     {
+                        
                         DataBaseOperations result = new DataBaseOperations();
                         string receivedMessage = Encoding.UTF8.GetString(memoryStream.ToArray());
-                        var res = await result.GetDeadLine(int.Parse(receivedMessage));
+                        
+                        var options = new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true,
+                            IgnoreNullValues = true
+                        };
+
+                        TasksParamDto userData = JsonSerializer.Deserialize<TasksParamDto>(receivedMessage, options);
+                        TasksParamDto valami = new TasksParamDto();
+                        Console.WriteLine(receivedMessage);
+                        var res = await result.GetDeadLine(userData.UserID);
                         await Send(JsonSerializer.Serialize(res));
                     }
                 }

@@ -254,35 +254,7 @@
   }
 
   function generateSoonestTask() {
-    const url = 'https://localhost:7295/RedMineDataList/taskdeadline';
-    const data = {
-      userID: getCurrentUserID(),
-    };
-    
-    querryWebSocket(`wss://localhost:7295/api/ws?Authorization=${jwtString}`);
-    
-    const options = {
-      method: 'POST',
-      headers: {
-        'Authorization': jwtString, 
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    };
-
-    fetch(url, options)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        generateTaskContainer(data);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    querryWebSocket();
   }
 
   function formatDate(dateStr) {
@@ -473,24 +445,24 @@ function TasksByMe(usid,projid, parentnode)
     });
 }
 
-function querryWebSocket(address) {
+function querryWebSocket() {
   const socket = new WebSocket(`wss://localhost:7295/api/ws`);
-
   // Event listener for when the WebSocket connection is open
   socket.onopen = function(event) {
-    const parameters = { 
-      parameter1: getCurrentUserID(),
-    };
+    const parameters = {
+      "userID":parseInt(getCurrentUserID())
+  };
     // Send data only after the connection is open
     socket.send(JSON.stringify(parameters));
   };
 
-
+  
+  
   // Event listener for when a message is received from the server
   socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
-    console.log("megkap")
     console.log('Received data:', data);
+    generateTaskContainer(data); 
   };
 
   // Event listener for errors
@@ -498,9 +470,10 @@ function querryWebSocket(address) {
     console.error('WebSocket error:', error);
   };
 
-  // Event listener for when the WebSocket connection is closed
+
   socket.onclose = function(event) {
     console.log('Connection closed:', event);
   };
 }
+
 startUp();
