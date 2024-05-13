@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using RedMine_backend.Core.Services.Authentication;
 using RedMine_backend.Controllers;
-using WebSocketApiControllerExample;
+using WebSocketApiControllerService;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

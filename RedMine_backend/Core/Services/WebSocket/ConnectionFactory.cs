@@ -1,6 +1,6 @@
 using System.Net.WebSockets;
 
-namespace WebSocketApiControllerExample
+namespace WebSocketApiControllerService
 {
     public interface IConnectionFactory
     {

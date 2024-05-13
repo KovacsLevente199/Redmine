@@ -267,14 +267,14 @@
     let displayNode = document.getElementById('expiring-container');
 
     let projectName = document.createElement('h3');
-    projectName.textContent = GLOBALprojectsList[record['projectID']];
+    projectName.textContent = GLOBALprojectsList[record['ProjectID']];
     let taskName = document.createElement('div');
     taskName.textContent = record['name'];
 
     let taskDesc = document.createElement('div');
-    taskDesc.textContent = record['description'];
+    taskDesc.textContent = record['Description'];
     let taskExpiration = document.createElement('div');
-    taskDesc.textContent = 'Lejárat: ' + formatDate(record['deadLine']);
+    taskExpiration.textContent = 'Lejárat: ' + formatDate(record['DeadLine']);
 
     displayNode.appendChild(projectName);
     displayNode.appendChild(taskName);
@@ -461,7 +461,6 @@ function querryWebSocket() {
   // Event listener for when a message is received from the server
   socket.onmessage = function(event) {
     const data = JSON.parse(event.data);
-    console.log('Received data:', data);
     generateTaskContainer(data); 
   };
 

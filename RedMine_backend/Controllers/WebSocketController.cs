@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Net.WebSockets;
 using System.Text;
-using WebSocketApiControllerExample;
+using WebSocketApiControllerService;
 
 namespace RedMine_backend.Controllers
 {

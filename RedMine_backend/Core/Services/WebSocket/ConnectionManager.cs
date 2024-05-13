@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading.Tasks;
 
-namespace WebSocketApiControllerExample
+namespace WebSocketApiControllerService
 {
     public interface IConnectionManager
     {
