@@ -6,6 +6,7 @@ A futtatáshoz szükséges csomagok:
 -Microsoft.EntityFrameworkCore.Sqlite (8.0.3)
 -Microsoft.AspNetCore.Authentication.JwtBearer (8.0.3)
 -Microsoft.IdentityModel.JsonWebTokens (7.5.1)
+-Google Chrome böngésző
 
 ---------------------------------------------------------------------------------------------
 3.Beadandó
@@ -14,7 +15,9 @@ Futtatása:
 	
 	1.Lépés: El kell indítani a RedMine_backend.sln-t
 	2.Lépés: Elindítani https módban a debugot
-	3.Megnyitni a RedMine_frontendbe index.html fájlt.
+	3.Megnyitni a RedMine_frontend mappába index.html fájlt.
+
+FONTOS!: A jelenlegi verzió csak a Google Chrome böngészőt támogatja. 
 
 A belépéshez 3 példafelhasználó lett létrehozva:
 Felhasználónév |	jelszó
